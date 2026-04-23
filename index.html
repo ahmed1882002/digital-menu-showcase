@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahmed Systems | أنظمة المطاعم والكافيهات الذكية</title>
+    <meta name="description" content="حلول رقمية متكاملة للمطاعم والكافيهات - أنظمة QR، لوحات تحكم، وطلبات واتساب تلقائية.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+    <div class="bg-image-overlay"></div>
+
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <div class="logo-area">
+                <div class="logo">
+                    <span class="logo-text">QR Menu</span>
+                </div>
+                <a href="https://wa.me/201270041844" target="_blank" class="glass-btn primary sm-btn" data-i18n="contactUs">تواصل معنا</a>
+            </div>
+
+            <div class="nav-controls-group">
+                <div class="currency-dropdown-container">
+                    <button id="selected-currency-btn" class="glass-btn primary sm-btn">
+                        <span id="current-currency-text">EGP</span>
+                        <span class="arrow">▼</span>
+                    </button>
+                </div>
+                <button id="lang-toggle" class="glass-btn secondary sm-btn">English</button>
+                <div class="theme-switch-wrapper">
+                    <label class="theme-switch" for="checkbox">
+                        <input type="checkbox" id="checkbox" />
+                        <div class="slider round"></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <h1 id="hero-title" class="animate-text">حول مطعمك إلى تجربة رقمية احترافية</h1>
+            <p id="hero-subtitle" class="animate-text-delay">نقدم أفضل الأنظمة التقنية لإدارة المنيو، الطلبات، والتقارير بأحدث الوسائل العصرية.</p>
+        </section>
+
+        <section class="view-switcher-section">
+            <div class="switcher-container">
+                <button id="view-cards-btn" class="switch-btn active">
+                    <span data-i18n="viewCards">الباقات</span>
+                </button>
+                <button id="view-table-btn" class="switch-btn">
+                    <span data-i18n="viewTable">جدول المقارنة</span>
+                </button>
+                <button id="view-summary-btn" class="switch-btn">
+                    <span data-i18n="viewSummary">معرفة الحساب</span>
+                </button>
+            </div>
+        </section>
+
+        <section id="pricing-content" class="content-area">
+            <!-- Dynamic Content will be injected here -->
+        </section>
+
+        <section class="custom-request-section">
+            <div class="glass-card custom-card">
+                <h2 data-i18n="customTitle">طلب خاص لمطعمك؟</h2>
+                <p data-i18n="customDesc">نصمم لك نظاماً مخصصاً بالكامل حسب احتياجاتك الخاصة ومزاجك.</p>
+                <a href="https://wa.me/201270041844" target="_blank" class="glass-btn primary large">
+                    <span data-i18n="contactUs">تواصل معنا الآن</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="glass-footer">
+        <p>© 2026 Ahmed Systems. All rights reserved.</p>
+        <div class="social-links">
+            <a href="https://wa.me/201270041844" target="_blank">WhatsApp: +20 12 70041844</a>
+        </div>
+    </footer>
+
+    <div id="currency-dropdown-list" class="dropdown-list">
+        <!-- Items populated by JS -->
+    </div>
+    <div id="dropdown-overlay" class="dropdown-overlay"></div>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

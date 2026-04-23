@@ -137,27 +137,93 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p style="color: var(--text-dim); font-size: 0.9rem; margin-top: 5px;">${t.totalFirstYear}</p>
                     </div>
                     <ul class="features-list">
-                        ${pkg.features.slice(0, 5).map(feat => `
+                        ${pkg.features.slice(0, 5).map((feat, idx) => `
                             <li>
                                 <span class="feat-icon ${feat.included ? '' : 'no'}">${feat.included ? '✓' : '✕'}</span>
                                 ${currentLang === 'ar' ? feat.ar : feat.en}
+                                ${idx === 4 ? `<span class="read-more-link" style="color: var(--primary); cursor: pointer; font-size: 0.8rem; text-decoration: underline; margin-right: 5px;" onclick="window.switchToTable()">...${t.readMore}</span>` : ''}
                             </li>
                         `).join('')}
-                        <li>...</li>
                     </ul>
                     <div class="card-extra-info" style="margin-bottom: 2rem; font-size: 0.85rem; color: var(--text-dim);">
                         <div>${t.setupFee}: ${setup} ${currentCurrency.symbol}</div>
                         <div>${t.annualFee}: ${host} ${currentCurrency.symbol}</div>
                     </div>
-                    <a href="https://wa.me/201270041844?text=${encodeURIComponent(`Hello, I am interested in the ${currentLang === 'ar' ? pkg.name_ar : pkg.name_en} package priced at ${total} ${currentCurrency.code}`)}" 
-                       target="_blank" class="glass-btn primary" style="width: 100%; justify-content: center;">
-                        ${t.getInTouch}
-                    </a>
+                    <div class="card-actions">
+                        <a href="https://wa.me/201270041844?text=${encodeURIComponent(`Hello, I am interested in the ${currentLang === 'ar' ? pkg.name_ar : pkg.name_en} package priced at ${total} ${currentCurrency.code}`)}" 
+                           target="_blank" class="glass-btn primary sm-btn">
+                            ${t.getInTouch}
+                        </a>
+                        <button class="glass-btn secondary sm-btn show-pkg-details" data-id="${pkg.id}">
+                            ${t.viewDetails}
+                        </button>
+                    </div>
                 </div>
             `;
         });
         html += `</div>`;
         pricingContent.innerHTML = html;
+
+        // Add events to details buttons
+        document.querySelectorAll('.show-pkg-details').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const pkgId = e.currentTarget.getAttribute('data-id');
+                showFullDetails(pkgId);
+            });
+        });
+    }
+
+    window.switchToTable = () => {
+        currentView = 'table';
+        setActiveBtn(viewTableBtn);
+        updateUI();
+        window.scrollTo({ top: document.querySelector('.view-switcher-section').offsetTop - 100, behavior: 'smooth' });
+    };
+
+    function showFullDetails(id) {
+        const pkg = siteData.packages.find(p => p.id === id);
+        const t = siteData.translations[currentLang];
+        const detailsOverlay = document.getElementById('details-overlay');
+        
+        let html = `
+            <div class="details-modal glass-card">
+                <button class="close-details">✕</button>
+                <h2>${currentLang === 'ar' ? pkg.name_ar : pkg.name_en}</h2>
+                <div class="details-grid">
+                    <div class="details-features">
+                        <h4>${t.feature}</h4>
+                        <ul class="features-list">
+                            ${pkg.features.map(feat => `
+                                <li>
+                                    <span class="feat-icon ${feat.included ? '' : 'no'}">${feat.included ? '✓' : '✕'}</span>
+                                    ${currentLang === 'ar' ? feat.ar : feat.en}
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                    <div class="details-pricing">
+                        <h4>${t.viewSummary}</h4>
+                        <div class="price-tag">
+                            <span class="amount">${formatPrice(pkg.setup_egp + pkg.host_egp)}</span>
+                            <span class="currency">${currentCurrency.symbol}</span>
+                        </div>
+                        <p>${t.setupFee}: ${formatPrice(pkg.setup_egp)} ${currentCurrency.symbol}</p>
+                        <p>${t.annualFee}: ${formatPrice(pkg.host_egp)} ${currentCurrency.symbol}</p>
+                        <p>${t.optionalSupport}: ${formatPrice(pkg.support_egp)} ${currentCurrency.symbol}</p>
+                        <a href="https://wa.me/201270041844" class="glass-btn primary" style="margin-top: 2rem; width: 100%; justify-content: center;">${t.contactUs}</a>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        detailsOverlay.innerHTML = html;
+        detailsOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        detailsOverlay.querySelector('.close-details').onclick = () => {
+            detailsOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        };
     }
 
     function renderTable() {
@@ -169,13 +235,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         html += `</tr></thead><tbody>`;
 
-        // All features logic
-        const allFeatures = siteData.packages[2].features; // Use Max package as reference
-        allFeatures.forEach((feat, idx) => {
-            html += `<tr><td class="feature-name">${currentLang === 'ar' ? feat.ar : feat.en}</td>`;
+        // We assume all packages have the same list of features (as in siteData)
+        const allFeatures = siteData.packages[0].features;
+
+        allFeatures.forEach((_, featIdx) => {
+            const featName = currentLang === 'ar' ? allFeatures[featIdx].ar : allFeatures[featIdx].en;
+            html += `<tr><td class="feature-name">${featName}</td>`;
+            
             siteData.packages.forEach(pkg => {
-                const pkgFeat = pkg.features[idx];
-                html += `<td><span class="feat-icon ${pkgFeat && pkgFeat.included ? '' : 'no'}">${pkgFeat && pkgFeat.included ? '✓' : '✕'}</span></td>`;
+                const included = pkg.features[featIdx].included;
+                html += `<td><span class="feat-icon ${included ? '' : 'no'}">${included ? '✓' : '✕'}</span></td>`;
             });
             html += `</tr>`;
         });
@@ -264,7 +333,27 @@ document.addEventListener('DOMContentLoaded', () => {
             renderSummary();
         } else {
             renderTable();
+            if (window.innerWidth <= 992) {
+                showToastAlert(siteData.translations[currentLang].scrollHint);
+            }
         }
+    }
+
+    function showToastAlert(message) {
+        // Remove existing toast if any
+        const oldToast = document.querySelector('.toast-alert');
+        if (oldToast) oldToast.remove();
+
+        const toast = document.createElement('div');
+        toast.className = 'toast-alert';
+        toast.innerHTML = `<span>↔</span> ${message}`;
+        document.body.appendChild(toast);
+
+        setTimeout(() => toast.classList.add('active'), 100);
+        setTimeout(() => {
+            toast.classList.remove('active');
+            setTimeout(() => toast.remove(), 500);
+        }, 4000);
     }
 
     // Initial Load

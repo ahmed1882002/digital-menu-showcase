@@ -93,7 +93,9 @@ const siteData = {
             getInTouch: 'اطلب هذا النظام',
             feature: 'الميزة',
             viewDetails: 'شاهد التفاصيل',
-            selectCurrency: 'اختر العملة المناسبة'
+            selectCurrency: 'اختر العملة المناسبة',
+            readMore: 'المزيد',
+            scrollHint: 'اسحب الجدول يميناً ويساراً لمشاهدة كافة التفاصيل'
         },
         en: {
             heroTitle: 'Transform Your Restaurant into a Digital Masterpiece',
@@ -113,7 +115,9 @@ const siteData = {
             getInTouch: 'Order This Package',
             feature: 'Feature',
             viewDetails: 'Show Details',
-            selectCurrency: 'Select Your Currency'
+            selectCurrency: 'Select Your Currency',
+            readMore: 'More',
+            scrollHint: 'Swipe horizontally to view all details'
         }
     }
 };
